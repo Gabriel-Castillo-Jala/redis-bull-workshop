@@ -1,3 +1,4 @@
+const _ = require('lodash');
 const http = require('http');
 
 const { movieController } = require('./controllers');
@@ -8,11 +9,20 @@ const server = http.createServer();
 server.on('request', async (req, res) => {
   const url = req.url;
 
-  if (url === '/status') {
+  if (_.startsWith(url, '/status')) {
     await movieController.getStatus(req, res);
-  } else {
-    res.write('Nothing here!');
-    res.end();
+  }  else if (_.startsWith(url, '/content')) {
+    await movieController.getContent(req, res);
+  } else if (_.startsWith(url, '/movie')) {
+    let body = '';
+
+    req.on('data', (chunk) => {
+        body += chunk;
+    });
+
+    req.on('end', async () => {
+      await movieController.getMovies(req, res, body);
+    });
   }
 });
 

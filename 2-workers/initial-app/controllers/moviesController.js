@@ -1,21 +1,43 @@
+const MovieHelper = require('../lib/movies/movieHelper.js');
+
 class MovieController {
-    async getStatus(req, res) {
-        const start = new Date();
+  constructor() {
+    this.helper = new MovieHelper();
+  }
 
-        await new Promise(resolve => {
-            setTimeout(() => {
-                resolve({data: 1});
-            }, 1000);
-        });
+  async getStatus(req, res) {
+    const status = await this.helper.getCurrentMovieStatus();
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.write(`{ "status": "${status}" }`);
+    res.end();
+  }
 
-        res.writeHead(200, {'Content-Type': 'text/html'});
-        res.write(`Hello World in ${new Date() - start}ms`);
-        res.end();
+  async getContent(req, res) {
+    try {
+      const movies = await this.helper.getLoadedMovies();
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.write(JSON.stringify(movies));
+      res.end();
+    } catch(err) {
+      res.writeHead(500, { 'Content-Type': 'application/json' });
+      res.write(`{ error: ${err.message} }`);
+      res.end();
     }
+  }
 
-    async getMovie(req, res) {
-
+  async getMovies(req, res, body) {
+    try {
+      const reqBody = JSON.parse(body);
+      await this.helper.filterMoviesByGenre(reqBody.genres);
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.write('{ "success": true, "status": "Movies loaded" }');
+      res.end();
+    } catch(err) {
+      res.writeHead(500, { 'Content-Type': 'application/json' });
+      res.write(`{ error: ${err.message} }`);
+      res.end();
     }
+  }
 }
 
 module.exports = MovieController;

@@ -7,5 +7,10 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "ioredis": "^5.3.2",
+    "lodash": "^4.17.21",
+    "node-fetch": "^2.7.0"
+  }
 }
