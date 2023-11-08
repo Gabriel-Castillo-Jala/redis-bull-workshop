@@ -1,0 +1,13 @@
+version: '3'
+volumes:
+  redis-data:
+    driver: local
+
+services:
+  # kbx session, etc.
+  redis:
+    image: redis
+    volumes:
+      - redis-data:/data
+    ports:
+      - '0.0.0.0:6331:6379'
