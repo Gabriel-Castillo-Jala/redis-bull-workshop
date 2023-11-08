@@ -4,7 +4,6 @@ volumes:
     driver: local
 
 services:
-  # kbx session, etc.
   redis:
     image: redis
     volumes:
