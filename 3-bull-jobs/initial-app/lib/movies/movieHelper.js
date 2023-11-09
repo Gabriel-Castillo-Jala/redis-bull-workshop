@@ -14,9 +14,9 @@ class MovieHelper {
 
     if (_.isEmpty(status)) {
       return 'No pending requests.';
-    } else if (_.isEqual('Loading')) {
+    } else if (_.isEqual(status, 'Loading')) {
       return 'Request in progress...';
-    } else if ('Loaded') {
+    } else if (_.isEqual(status, 'Loaded')) {
       return 'Request is ready!'
     }
   }
