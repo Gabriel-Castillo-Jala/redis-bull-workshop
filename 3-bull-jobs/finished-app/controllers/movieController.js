@@ -1,6 +1,5 @@
-const MovieHelper = require('../lib/movies/movieHelper.js');
-
-class MovieController {
+import { MovieHelper } from '../lib/movies/movieHelper.js';
+export class MovieController {
   constructor() {
     this.helper = new MovieHelper();
   }
@@ -39,5 +38,3 @@ class MovieController {
     }
   }
 }
-
-module.exports = MovieController;

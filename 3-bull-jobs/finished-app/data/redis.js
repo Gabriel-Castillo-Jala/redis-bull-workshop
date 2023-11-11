@@ -1,3 +1,3 @@
-const Redis = require('ioredis');
+import IORedis from 'ioredis';
 
-module.exports = new Redis({ port: 6331 });
+export const Redis = new IORedis({ port: 6331 });

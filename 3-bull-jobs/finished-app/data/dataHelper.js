@@ -1,8 +1,8 @@
-const _ = require('lodash');
+import _ from 'lodash';
 
-const redis = require('./redis');
+import { Redis } from './redis.js';
 
-class DataHelper {
+export class DataHelper {
 
   constructor() {
     this.movieListKey = 'bmqpoc:movies';
@@ -18,7 +18,7 @@ class DataHelper {
   }
 
   async flushMovies() {
-    await redis.del(this.movieListKey);
+    await Redis.del(this.movieListKey);
   }
 
   async saveMovies(movies) {
@@ -30,13 +30,13 @@ class DataHelper {
 
     const formattedMovies = this._stringifyMovies(movies);
 
-    await redis.lpush(this.movieListKey, formattedMovies);
-    await redis.expire(this.movieListKey, 360); // 5 minutes to expire
+    await Redis.lpush(this.movieListKey, formattedMovies);
+    await Redis.expire(this.movieListKey, 360); // 5 minutes to expire
   }
 
   async getMovies() {
-    const moviesLength = await redis.llen('bmqpoc:movies');
-    const movies = await redis.lrange('bmqpoc:movies', 0, moviesLength);
+    const moviesLength = await Redis.llen('bmqpoc:movies');
+    const movies = await Redis.lrange('bmqpoc:movies', 0, moviesLength);
 
     if (_.isNil(movies) || !_.isArray(movies) || _.isEmpty(movies)) {
       return [];
@@ -46,18 +46,18 @@ class DataHelper {
   }
 
   async saveStatus(status) {
-    await redis.del(this.statusKey);
+    await Redis.del(this.statusKey);
 
     if (_.isEmpty(status)) {
       return;
     }
 
-    await redis.set(this.statusKey, status);
-    await redis.expire(this.statusKey, 360); // 5 minutes to expire
+    await Redis.set(this.statusKey, status);
+    await Redis.expire(this.statusKey, 360); // 5 minutes to expire
   }
 
   async getStatus() {
-    const status = await redis.get(this.statusKey);
+    const status = await Redis.get(this.statusKey);
 
     if (_.isEmpty(status)) {
       return '';
@@ -66,5 +66,3 @@ class DataHelper {
     return status;
   }
 }
-
-module.exports = DataHelper;

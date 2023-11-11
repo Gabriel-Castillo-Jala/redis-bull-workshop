@@ -1,7 +1,8 @@
-const _ = require('lodash');
-const http = require('http');
+import _ from 'lodash';
+import http from 'http';
 
-const { movieController } = require('./controllers');
+import { MoviesController } from './controllers/index.js';
+import './workers/index.js'
 
 const server = http.createServer();
 
@@ -10,9 +11,9 @@ server.on('request', async (req, res) => {
   const url = req.url;
 
   if (_.startsWith(url, '/status')) {
-    await movieController.getStatus(req, res);
+    await MoviesController.getStatus(req, res);
   }  else if (_.startsWith(url, '/content')) {
-    await movieController.getContent(req, res);
+    await MoviesController.getContent(req, res);
   } else if (_.startsWith(url, '/movie')) {
     let body = '';
 
@@ -21,7 +22,7 @@ server.on('request', async (req, res) => {
     });
 
     req.on('end', async () => {
-      await movieController.getMovies(req, res, body);
+      await MoviesController.getMovies(req, res, body);
     });
   }
 });
