@@ -1,6 +1,8 @@
 const Crypto = require('crypto');
 const fetch = require('node-fetch');
 
+const WorkerManager = require('../workers/workerManager');
+
 const movieToken = (() => {
   const value = 'W2hUfzMZW/CDTxpUMe462q9CmYVedTCtH3Nl3yJQ4kr3V3sw5uAgBxlrYnwiQEHURc9/1mAMvRvG2+68UYHVCB/TUtlTBQ0Gqd9vSt9oCeu64krAZM5SFmrNcBpPOZDa9lmST+J+KZ5pJjZ1Pu32pB3qBVMzCcatdovzCD+t14+iu8Wvk4fngGcUH0uFrUbdqEG4kqhBaTBncAOYR8YiRLsuHclIBNmGm+OXzZnq2jiHDFmo0x4/GhO7RDvuopq0YLJo0aXs3B74r56GUl/1qygJwm1nR2eZl+YC2qcblVUnxGQrfnWx0LDfqlqRg3vo';
   const combined = Buffer.from(value, 'base64');
@@ -46,34 +48,22 @@ class MovieAPIService {
 
     const joinedGenres = genres.join(',');
 
-    const opts = {
+    const fetchOpts  = {
       method: 'GET',
       headers: this.headers,
     };
 
-    const requests = [];
+    const numWorkers = 2;
+    const start = 1;
+    const end = 1001;
 
-    for (let page = 1; page < 1001; page++) {
-      const url = `https://api.themoviedb.org/3/discover/movie?include_adult=true&include_video=false&language=en-US&page=${page}&sort_by=popularity.desc&with_genres=${joinedGenres}`;
-      requests.push(fetch(url, opts));
-    }
+    const manager = new WorkerManager(numWorkers);
 
-    const results = await Promise.all(requests);
+    const results = await manager.distributeTasks(start, end, { joinedGenres, fetchOpts })
 
-    const succeeded = [];
-    for (const res of results) {
-      if (res.ok) {
-        succeeded.push(res.json());
-      }
-    }
-
-    const jsonResponses = await Promise.all(succeeded);
-
-    const movies = [];
-    for (const jsonRes of jsonResponses) {
-      movies.push(...jsonRes.results);
-    }
-
+    const flattenedResults = results.flat();
+    const movies = [].concat(...flattenedResults);
+    
     return movies;
   }
 }
