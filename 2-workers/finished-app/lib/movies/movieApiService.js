@@ -21,6 +21,8 @@ class MovieAPIService {
       accept: 'application/json',
       Authorization: `Bearer ${movieToken}`,
     };
+
+    this.workerManager = new WorkerManager();
   }
 
 
@@ -41,29 +43,19 @@ class MovieAPIService {
     return jsonRes.genres;
   }
 
-  async getMoviesByGenres(genres) {
+  async getMoviesByGenres(genres, validGenres) {
     if (!genres || !Array.isArray(genres) || genres.length <= 0) {
       throw new Error('Need at least a genre to filter');
     }
 
     const joinedGenres = genres.join(',');
 
-    const fetchOpts  = {
+    const opts = {
       method: 'GET',
       headers: this.headers,
     };
 
-    const numWorkers = 2;
-    const start = 1;
-    const end = 1001;
-
-    const manager = new WorkerManager(numWorkers);
-
-    const results = await manager.distributeTasks(start, end, { joinedGenres, fetchOpts })
-
-    const flattenedResults = results.flat();
-    const movies = [].concat(...flattenedResults);
-    
+    const movies = await this.workerManager.run(opts, joinedGenres, validGenres);
     return movies;
   }
 }

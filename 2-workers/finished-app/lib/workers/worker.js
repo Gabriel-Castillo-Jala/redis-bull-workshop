@@ -1,43 +1,54 @@
 const { parentPort, workerData } = require('worker_threads');
 const fetch = require('node-fetch');
-const { result } = require('lodash');
 
-
-const performTask = async (start, end, opts) => {
+const getMoviesWorker = async () => {
   const requests = [];
 
-  for (let page = start; page <= end; page++) {
-    // console.info('page', i);
-    const url = `https://api.themoviedb.org/3/discover/movie?include_adult=true&include_video=false&language=en-US&page=${page}&sort_by=popularity.desc&with_genres=${opts.joinedGenres}`;
-    requests.push(fetch(url, opts.fetchOpts));
+  for (let page = workerData.startPage; page <= workerData.endPage; page++) {
+    const url = `https://api.themoviedb.org/3/discover/movie?include_adult=true&include_video=false&language=en-US&page=${page}&sort_by=popularity.desc&with_genres=${workerData.genres}`;
+    requests.push(fetch(url, workerData.fetchOpts));
   }
+
   const results = await Promise.all(requests);
+
   const succeeded = [];
   for (const res of results) {
     if (res.ok) {
       succeeded.push(res.json());
     }
   }
+
   const jsonResponses = await Promise.all(succeeded);
-  console.info(`Worker........start: ${start}, end: ${end}`);
 
-    const movies = [];
-    for (const jsonRes of jsonResponses) {
-      movies.push(...jsonRes.results);
-    }
+  const movies = [];
+  for (const jsonRes of jsonResponses) {
+    movies.push(...jsonRes.results);
+  }
 
-    return movies;
+  const mappedGenres = new Map(workerData.validGenres.map((genre) => [genre.id, genre.name.toLowerCase()]));
+
+  for (const movie of movies) {
+    const genreLabels = [];
+
+    movie.genre_ids.forEach(id => {
+      genreLabels.push(mappedGenres.get(id));
+    });
+
+    movie.genreLabels = genreLabels;
+    delete movie.genre_ids;
+
+    await new Promise((resolve) => {
+      setTimeout(resolve, 1);
+    });
+  }
+
+  return movies;
 }
 
-try {
-  const { start, end, opts } = workerData;
-  performTask(start, end, opts)
-  .then((resolvedResults) => {
-    parentPort.postMessage(resolvedResults);
+getMoviesWorker()
+  .then((fetched) => {
+    parentPort.postMessage(fetched);
   })
-  .catch((error) => {
-    parentPort.postMessage({ error: error.message });
+  .catch((err) => {
+    throw err;
   });
-} catch (error) {
-  console.error(error);
-}
