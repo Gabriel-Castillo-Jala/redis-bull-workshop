@@ -9,7 +9,7 @@ export default class SortMoviesWorker {
   #dataHelper;
   #opts = {};
   #movies = [];
-  #defaultOpts = { concurrency: 5, rey };
+  #defaultOpts = { concurrency: 5 };
 
   constructor(queueName, opts = {}) {
     this.#opts = opts;
