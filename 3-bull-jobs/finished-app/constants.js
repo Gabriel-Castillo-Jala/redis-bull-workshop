@@ -17,21 +17,21 @@ export const ARENA_CONFIG = [
   {
     type: 'bullmq',
     name: QUEUES.GENRE_FETCHING_QUEUE.name,
-    hostId: 'test',
+    hostId: 'Genre Fetching Queue',
     redis: { port: 6331 }
 
   },
   {
     type: 'bullmq',
     name: QUEUES.MOVIE_FETCHING_QUEUE.name,
-    hostId: 'test1',
+    hostId: 'Movie Fetching Queue',
     redis: { port: 6331 }
 
   },
   {
     type: 'bullmq',
     name: QUEUES.MOVIE_SORTING_QUEUE.name,
-    hostId: 'test4',
+    hostId: 'Movie Sorting Queue',
     redis: { port: 6331 }
   }
 ]
