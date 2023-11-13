@@ -1,32 +1,32 @@
 import _ from 'lodash';
-import http from 'http';
+import express from 'express';
+import Arena from 'bull-arena';
+import { Queue } from 'bullmq';
+import bodyParser from 'body-parser';
 
-import { MoviesController } from './controllers/index.js';
 import './workers/index.js'
+import { ARENA_CONFIG } from './constants.js';
+import { MoviesController } from './controllers/index.js';
 
-const server = http.createServer();
+const app = express();
+const arena = Arena({ BullMQ: Queue, queues: ARENA_CONFIG });
 
-// Create a server object
-server.on('request', async (req, res) => {
-  const url = req.url;
+app.use(bodyParser.json());
+app.use('/queues', arena);
 
-  if (_.startsWith(url, '/status')) {
-    await MoviesController.getStatus(req, res);
-  }  else if (_.startsWith(url, '/content')) {
-    await MoviesController.getContent(req, res);
-  } else if (_.startsWith(url, '/movie')) {
-    let body = '';
+app.get('/status', async (req, res) => {
+  await MoviesController.getStatus(req, res);
+})
 
-    req.on('data', (chunk) => {
-        body += chunk;
-    });
+app.get('/content', async (req, res) => {
+  await MoviesController.getContent(req, res);
+})
 
-    req.on('end', async () => {
-      await MoviesController.getMovies(req, res, body);
-    });
-  }
-});
+app.post('/movie', async (req, res) => {
+  await MoviesController.getMovies(req, res, req.body);
+})
 
-server.listen(3000, () => {
+
+app.listen(3000, () => {
   console.log("server start at port 3000");
 });

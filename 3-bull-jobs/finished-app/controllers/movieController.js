@@ -26,8 +26,8 @@ export class MovieController {
 
   async getMovies(req, res, body) {
     try {
-      const reqBody = JSON.parse(body);
-      await this.helper.filterMoviesByGenre(reqBody.genres);
+      const { genres } = body;
+      await this.helper.filterMoviesByGenre(genres);
       res.writeHead(200, { 'Content-Type': 'application/json' });
       res.write('{ "success": true, "status": "Movies loaded" }');
       res.end();
