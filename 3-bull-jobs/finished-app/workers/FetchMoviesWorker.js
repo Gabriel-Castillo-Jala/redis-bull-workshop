@@ -1,7 +1,7 @@
 import _ from "lodash";
 import { Worker } from "bullmq";
 
-import { Redis } from "../data/redis.js";
+import { redis } from "../data/redis.js";
 import { MovieSortingQueue } from "../queues/index.js";
 import { MovieAPIService } from "../lib/movies/movieApiService.js";
 
@@ -40,7 +40,7 @@ export default class FetchMoviesWorker {
         }
       },
       {
-        connection: Redis,
+        connection: redis,
         ...this.#defaultOpts,
         ...this.#opts,
       }

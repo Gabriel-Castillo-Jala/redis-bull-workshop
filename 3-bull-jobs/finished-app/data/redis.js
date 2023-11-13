@@ -1,6 +1,6 @@
 import IORedis from 'ioredis';
 
-export const Redis = new IORedis({
+export const redis = new IORedis({
   port: 6331,
   maxRetriesPerRequest: null
 });

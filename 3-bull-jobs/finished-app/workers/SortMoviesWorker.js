@@ -1,7 +1,7 @@
 import _ from "lodash";
 import { Worker } from "bullmq";
 
-import { Redis } from "../data/redis.js";
+import { redis } from "../data/redis.js";
 import { DataHelper } from "../data/dataHelper.js";
 
 export default class SortMoviesWorker {
@@ -40,7 +40,7 @@ export default class SortMoviesWorker {
         }
       },
       {
-        connection: Redis,
+        connection: redis,
         ...this.#defaultOpts,
         ...this.#opts,
       }

@@ -1,5 +1,5 @@
 import { Queue } from 'bullmq';
-import { Redis } from '../data/redis.js';
+import { redis } from '../data/redis.js';
 
 export default class BaseQueue {
   #queue;
@@ -17,7 +17,7 @@ export default class BaseQueue {
     this.#queue = new Queue(
       queueName,
       {
-        connection: Redis,
+        connection: redis,
         defaultJobOptions: this.#defaultOpts,
         ...opts
       }
