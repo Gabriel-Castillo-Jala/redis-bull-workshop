@@ -26,18 +26,13 @@ export default class FetchMoviesWorker {
     return new Worker(
       this.#queueName,
       async (job) => {
-        try {
-          job.progress = 0;
-          console.log('Fetching movies...');
-          await this._fetchMovies(job.data.selectedGenres);
-          // Two thirds of the progress made.
-          await job.updateProgress(67);
-          console.log("Movies fetched. Starting sort...");
-        } catch (err) {
-          console.error(err);
-        } finally {
-          await MovieSortingQueue.enqueue({ movies: this.#movies });
-        }
+        job.progress = 0;
+        console.log('Fetching movies...');
+        await this._fetchMovies(job.data.selectedGenres);
+        // Two thirds of the progress made.
+        await job.updateProgress({ part: 2, completion: 67, job: 'fetch movies' });
+        console.log("Movies fetched. Starting sort...");
+        await MovieSortingQueue.enqueue({ movies: this.#movies });
       },
       {
         connection: redis,

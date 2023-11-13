@@ -49,22 +49,17 @@ export default class FetchGenresWorker {
     return new Worker(
       this.#queueName,
       async (job) => {
-        try {
-          job.progress = 0;
-          console.log('Fetching genres..');
-          await this.#dataHelper.saveStatus('Loading');
+        job.progress = 0;
+        console.log('Fetching genres..');
+        await this.#dataHelper.saveStatus('Loading');
 
-          await this._fetchGenres();
-          this._mapGenres();
-          this._pickGenres(job.data.genres);
+        await this._fetchGenres();
+        this._mapGenres();
+        this._pickGenres(job.data.genres);
 
-          // One third of the progress made.
-          await job.updateProgress(25);
-          console.log('Genres fetched and loaded, moving to movie fetching...');
-          await MovieFetchingQueue.enqueue({ selectedGenres: this.#genres });
-        } catch (err) {
-          console.error(err);
-        }
+        // One third of the progress made.
+        await job.updateProgress({ part: 1, completion: 33, job: 'fetch and sort genres' });
+        await MovieFetchingQueue.enqueue({ selectedGenres: this.#genres });
       },
       {
         connection: redis,

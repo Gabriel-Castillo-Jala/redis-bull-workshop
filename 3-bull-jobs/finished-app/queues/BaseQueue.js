@@ -7,7 +7,7 @@ export default class BaseQueue {
   queueName;
   #defaultOpts = {
     attempts: 5,
-    backoff: { type: 'exponential', delay: 3000 },
+    backoff: { type: 'exponential', delay: 1000, attempts: 1 },
   }
 
 

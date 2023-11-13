@@ -1,5 +1,5 @@
 import { log } from 'console-log-colors';
-export default class QueueEventListener {
+export default class QueueEventHandler {
   constructor(QueueListenerInstance) {
     this.queue = QueueListenerInstance;
   }
@@ -15,8 +15,13 @@ export default class QueueEventListener {
     log.cyan(`Job #${jobId} has started.`);
   };
 
-  async _onProgress(jobId, data) {
-    log.yellow(`Job #${jobId} progress: ${data}%.`);
+  async _onProgress(jobId, { part, completion, job }) {
+    log.yellow([
+      `Job #${jobId}`,
+      `has finished processing part ${part}:`,
+      `"${job}".`,
+      `Completion is: ${completion}%.`
+    ].join(' '));
   };
 
   async _onCompleted(jobId) {

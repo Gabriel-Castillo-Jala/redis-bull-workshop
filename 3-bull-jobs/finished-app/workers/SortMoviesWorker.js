@@ -9,7 +9,7 @@ export default class SortMoviesWorker {
   #dataHelper;
   #opts = {};
   #movies = [];
-  #defaultOpts = { concurrency: 5 };
+  #defaultOpts = { concurrency: 5, rey };
 
   constructor(queueName, opts = {}) {
     this.#opts = opts;
@@ -27,17 +27,12 @@ export default class SortMoviesWorker {
     return new Worker(
       this.#queueName,
       async (job) => {
-        try {
-          console.log('Sorting movies...');
-          this._sortMovies(job.data.movies);
-          console.log('Movies sorted. Saving them to cache.');
-          await this.#dataHelper.saveMovies(this.#movies);
-          await this.#dataHelper.saveStatus('Loaded');
-          // Mark hte progress as completed.
-          job.updateProgress(100);
-        } catch (err) {
-          console.error(err);
-        }
+        console.log('Sorting movies...');
+        this._sortMovies(job.data.movies);
+        await this.#dataHelper.saveMovies(this.#movies);
+        await this.#dataHelper.saveStatus('Loaded');
+        // Mark hte progress as completed.
+        await job.updateProgress({ part: 3, completion: 100, job: 'sort and cache movies' });
       },
       {
         connection: redis,
