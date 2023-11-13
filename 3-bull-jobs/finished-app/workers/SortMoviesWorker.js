@@ -1,10 +1,10 @@
-import _ from "lodash";
-import { Worker } from "bullmq";
+const _ = require('lodash');
+const { Worker } = require('bullmq');
 
-import { redis } from "../data/redis.js";
-import { DataHelper } from "../data/dataHelper.js";
+const { redis } = require('../data/redis.js');
+const { DataHelper } = require('../data/dataHelper.js');
 
-export default class SortMoviesWorker {
+class SortMoviesWorker {
   #queueName;
   #dataHelper;
   #opts = {};
@@ -42,3 +42,5 @@ export default class SortMoviesWorker {
     );
   }
 }
+
+module.exports.SortMoviesWorker = SortMoviesWorker;

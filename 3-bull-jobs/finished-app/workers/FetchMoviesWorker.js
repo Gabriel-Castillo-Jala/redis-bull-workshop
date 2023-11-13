@@ -1,11 +1,10 @@
-import _ from "lodash";
-import { Worker } from "bullmq";
+const { Worker } = require('bullmq');
 
-import { redis } from "../data/redis.js";
-import { MovieSortingQueue } from "../queues/index.js";
-import { MovieAPIService } from "../lib/movies/movieApiService.js";
+const { redis } = require('../data/redis.js');
+const { MovieSortingQueue } = require('../queues/index.js');
+const { MovieAPIService } = require('../lib/movies/movieApiService.js');
 
-export default class FetchMoviesWorker {
+class FetchMoviesWorker {
   #queueName;
   #apiService;
   #opts = {};
@@ -42,3 +41,5 @@ export default class FetchMoviesWorker {
     );
   }
 }
+
+module.exports.FetchMoviesWorker = FetchMoviesWorker;

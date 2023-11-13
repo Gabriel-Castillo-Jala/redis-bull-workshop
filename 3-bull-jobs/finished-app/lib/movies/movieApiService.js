@@ -1,5 +1,5 @@
-import Crypto from 'crypto';
-import fetch from 'node-fetch';
+const Crypto = require('crypto');
+const fetch = require('node-fetch');
 
 const movieToken = (() => {
   const value = 'W2hUfzMZW/CDTxpUMe462q9CmYVedTCtH3Nl3yJQ4kr3V3sw5uAgBxlrYnwiQEHURc9/1mAMvRvG2+68UYHVCB/TUtlTBQ0Gqd9vSt9oCeu64krAZM5SFmrNcBpPOZDa9lmST+J+KZ5pJjZ1Pu32pB3qBVMzCcatdovzCD+t14+iu8Wvk4fngGcUH0uFrUbdqEG4kqhBaTBncAOYR8YiRLsuHclIBNmGm+OXzZnq2jiHDFmo0x4/GhO7RDvuopq0YLJo0aXs3B74r56GUl/1qygJwm1nR2eZl+YC2qcblVUnxGQrfnWx0LDfqlqRg3vo';
@@ -13,7 +13,7 @@ const movieToken = (() => {
   return decrypted;
 })();
 
-export class MovieAPIService {
+class MovieAPIService {
   constructor() {
     this.headers = {
       accept: 'application/json',
@@ -77,3 +77,5 @@ export class MovieAPIService {
     return movies;
   }
 }
+
+module.exports.MovieAPIService = MovieAPIService;

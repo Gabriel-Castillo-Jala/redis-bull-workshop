@@ -1,17 +1,17 @@
-import { QueueEvents } from 'bullmq';
+const { QueueEvents } = require('bullmq');
 
-import { redis } from '../data/redis.js';
-import QueueEventHandler from './queueHandler.js';
-import GenreFetchingQueue from './GenreFetchingQueue.js';
-import MovieFetchingQueue from './MovieFetchingQueue.js';
-import MovieSortingQueue  from './MovieSortingQueue.js';
+const { redis } = require('../data/redis.js');
+const { QueueEventHandler } = require('./queueHandler.js');
+const { GenreFetchingQueue } = require('./GenreFetchingQueue.js');
+const { MovieFetchingQueue } = require('./MovieFetchingQueue.js');
+const { MovieSortingQueue } = require('./MovieSortingQueue.js');
 
 // Init queue monitoring
 new QueueEventHandler(new QueueEvents(MovieSortingQueue.queueName, { connection: redis })).listen();
 new QueueEventHandler(new QueueEvents(GenreFetchingQueue.queueName, { connection: redis })).listen();
 new QueueEventHandler(new QueueEvents(MovieFetchingQueue.queueName, { connection: redis })).listen();
 
-export {
+module.exports = {
   GenreFetchingQueue,
   MovieFetchingQueue,
   MovieSortingQueue,

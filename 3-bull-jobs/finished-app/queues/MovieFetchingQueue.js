@@ -1,5 +1,5 @@
-import BaseQueue from './BaseQueue.js';
-import { QUEUES } from '../constants.js';
+const { BaseQueue } = require('./BaseQueue.js');
+const { QUEUES } = require('../constants.js');
 
 const classParams = [
   QUEUES.MOVIE_FETCHING_QUEUE.name,
@@ -12,5 +12,4 @@ class MovieFetchingQueue extends BaseQueue {
   }
 }
 
-const singleton = Object.freeze(new MovieFetchingQueue(...classParams));
-export default singleton;
+module.exports.MovieFetchingQueue = Object.freeze(new MovieFetchingQueue(...classParams));

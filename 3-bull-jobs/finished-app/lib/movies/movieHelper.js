@@ -1,10 +1,10 @@
-import _ from 'lodash';
+const _ = require('lodash');
 
-import { DataHelper } from '../../data/dataHelper.js';
-import { MovieAPIService } from './movieApiService.js';
-import { GenreFetchingQueue } from '../../queues/index.js';
+const { DataHelper } = require('../../data/dataHelper.js');
+const { MovieAPIService } = require('./movieApiService.js');
+const { GenreFetchingQueue } = require('../../queues/index.js');
 
-export class MovieHelper {
+class MovieHelper {
   constructor() {
     this.apiService = new MovieAPIService();
     this.dataHelper = new DataHelper();
@@ -40,3 +40,5 @@ export class MovieHelper {
     await GenreFetchingQueue.enqueue({ genres });
   }
 }
+
+module.exports.MovieHelper = MovieHelper;

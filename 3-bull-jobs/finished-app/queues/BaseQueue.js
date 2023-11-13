@@ -1,7 +1,7 @@
-import { Queue } from 'bullmq';
-import { redis } from '../data/redis.js';
+const { Queue } = require('bullmq');
+const { redis } = require('../data/redis.js');
 
-export default class BaseQueue {
+class BaseQueue {
   #queue;
   #jobName;
   queueName;
@@ -48,3 +48,5 @@ export default class BaseQueue {
     await this.#queue.drain();
   }
 }
+
+module.exports.BaseQueue = BaseQueue;

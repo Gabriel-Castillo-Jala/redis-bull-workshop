@@ -1,4 +1,4 @@
-export const QUEUES = {
+const QUEUES = {
   GENRE_FETCHING_QUEUE: {
     name: 'genre-fetching-queue',
     jobName: 'fetch-movie-genres',
@@ -13,7 +13,7 @@ export const QUEUES = {
   },
 };
 
-export const ARENA_CONFIG = [
+const ARENA_CONFIG = [
   {
     type: 'bullmq',
     name: QUEUES.GENRE_FETCHING_QUEUE.name,
@@ -35,3 +35,6 @@ export const ARENA_CONFIG = [
     redis: { port: 6331 }
   }
 ]
+
+module.exports.QUEUES = QUEUES;
+module.exports.ARENA_CONFIG = ARENA_CONFIG;

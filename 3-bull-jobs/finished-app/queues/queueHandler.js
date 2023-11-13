@@ -1,5 +1,5 @@
-import { log } from 'console-log-colors';
-export default class QueueEventHandler {
+const { log } = require('console-log-colors');
+class QueueEventHandler {
   constructor(QueueListenerInstance) {
     this.queue = QueueListenerInstance;
   }
@@ -32,3 +32,5 @@ export default class QueueEventHandler {
     log.red(`Job #${jobId} has failed to complete.`);
   };
 }
+
+module.exports.QueueEventHandler = QueueEventHandler;

@@ -1,5 +1,5 @@
-import { MovieHelper } from '../lib/movies/movieHelper.js';
-export class MovieController {
+const { MovieHelper } = require('../lib/movies/movieHelper.js');
+class MovieController {
   constructor() {
     this.helper = new MovieHelper();
   }
@@ -38,3 +38,5 @@ export class MovieController {
     }
   }
 }
+
+module.exports.MovieController = MovieController;

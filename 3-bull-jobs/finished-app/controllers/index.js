@@ -1,3 +1,3 @@
-import { MovieController } from './movieController.js';
+const { MovieController } = require('./movieController.js');
 
-export const MoviesController = new MovieController();
+module.exports.MoviesController = new MovieController();

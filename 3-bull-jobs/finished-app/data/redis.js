@@ -1,6 +1,6 @@
-import IORedis from 'ioredis';
+const IORedis = require('ioredis');
 
-export const redis = new IORedis({
+module.exports.redis = new IORedis({
   port: 6331,
   maxRetriesPerRequest: null
 });

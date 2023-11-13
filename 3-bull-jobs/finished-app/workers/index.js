@@ -1,7 +1,7 @@
-import { QUEUES } from '../constants.js';
-import FetchGenresWorker from './FetchGenresWorker.js';
-import FetchMoviesWorker from './FetchMoviesWorker.js';
-import SortMoviesWorker from './SortMoviesWorker.js';
+const { QUEUES } = require('../constants.js');
+const { FetchGenresWorker } = require('./FetchGenresWorker.js');
+const { FetchMoviesWorker } = require('./FetchMoviesWorker.js');
+const { SortMoviesWorker } = require('./SortMoviesWorker.js');
 
 new FetchGenresWorker(QUEUES.GENRE_FETCHING_QUEUE.name).startWork();
 new FetchMoviesWorker(QUEUES.MOVIE_FETCHING_QUEUE.name).startWork();

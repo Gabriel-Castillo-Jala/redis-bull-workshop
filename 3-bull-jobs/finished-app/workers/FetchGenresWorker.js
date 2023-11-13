@@ -1,12 +1,12 @@
-import _ from "lodash";
-import { Worker } from "bullmq";
+const _ =  require('lodash');
+const { Worker } =  require('bullmq');
 
-import { redis } from "../data/redis.js";
-import { DataHelper } from "../data/dataHelper.js";
-import { MovieFetchingQueue } from "../queues/index.js";
-import { MovieAPIService } from "../lib/movies/movieApiService.js";
+const { redis } =  require('../data/redis.js');
+const { DataHelper } =  require('../data/dataHelper.js');
+const { MovieFetchingQueue } =  require('../queues/index.js');
+const { MovieAPIService } =  require('../lib/movies/movieApiService.js');
 
-export default class FetchGenresWorker {
+class FetchGenresWorker {
   #queueName;
   #apiService;
   #dataHelper;
@@ -69,3 +69,5 @@ export default class FetchGenresWorker {
     );
   }
 }
+
+module.exports.FetchGenresWorker = FetchGenresWorker;

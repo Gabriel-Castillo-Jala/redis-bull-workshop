@@ -1,8 +1,7 @@
-import _ from 'lodash';
+const _ = require('lodash');
 
-import { redis } from './redis.js';
-
-export class DataHelper {
+const { redis } = require('./redis.js');
+class DataHelper {
 
   constructor() {
     this.movieListKey = 'bmqpoc:movies';
@@ -66,3 +65,5 @@ export class DataHelper {
     return status;
   }
 }
+
+module.exports.DataHelper = DataHelper;
