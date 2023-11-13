@@ -1,10 +1,10 @@
-import _ from 'lodash';
-import { Worker } from 'bullmq';
+import _ from "lodash";
+import { Worker } from "bullmq";
 
-import { Redis } from '../data/redis.js';
-import { DataHelper } from '../data/dataHelper.js';
-import { MovieFetchingQueue } from '../queues/index.js';
-import { MovieAPIService } from '../lib/movies/movieApiService.js';
+import { Redis } from "../data/redis.js";
+import { DataHelper } from "../data/dataHelper.js";
+import { MovieFetchingQueue } from "../queues/index.js";
+import { MovieAPIService } from "../lib/movies/movieApiService.js";
 
 export default class FetchGenresWorker {
   #queueName;
@@ -27,7 +27,9 @@ export default class FetchGenresWorker {
   }
 
   _mapGenres() {
-    this.#genreMap = new Map(this.#genres.map((genre) => [genre.name.toLowerCase(), genre.id]));
+    this.#genreMap = new Map(
+      this.#genres.map((genre) => [genre.name.toLowerCase(), genre.id])
+    );
   }
 
   _pickGenres(requestedGenres) {
@@ -45,20 +47,24 @@ export default class FetchGenresWorker {
 
   startWork() {
     return new Worker(
-      this.#queueName,  
-      async ({ data }) => {
+      this.#queueName,
+      async (job) => {
         try {
+          job.progress = 0;
           console.log('Fetching genres..');
           await this.#dataHelper.saveStatus('Loading');
-          await this._fetchGenres();
-                this._mapGenres();
-                this._pickGenres(data.genres);
 
+          await this._fetchGenres();
+          this._mapGenres();
+          this._pickGenres(job.data.genres);
+
+          // One third of the progress made.
+          await job.updateProgress(25);
           console.log('Genres fetched and loaded, moving to movie fetching...');
           await MovieFetchingQueue.enqueue({ selectedGenres: this.#genres });
         } catch (err) {
           console.error(err);
-        }       
+        }
       },
       {
         connection: Redis,

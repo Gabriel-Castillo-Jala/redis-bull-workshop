@@ -1,9 +1,8 @@
-import _ from 'lodash';
-import { Worker } from 'bullmq';
+import _ from "lodash";
+import { Worker } from "bullmq";
 
-import { Redis } from '../data/redis.js';
-import { MovieMailingQueue } from '../queues/index.js';
-import { DataHelper } from '../data/dataHelper.js';
+import { Redis } from "../data/redis.js";
+import { DataHelper } from "../data/dataHelper.js";
 
 export default class SortMoviesWorker {
   #queueName;
@@ -26,18 +25,18 @@ export default class SortMoviesWorker {
 
   startWork() {
     return new Worker(
-      this.#queueName,  
-      async ({ data }) => {
+      this.#queueName,
+      async (job) => {
         try {
           console.log('Sorting movies...');
-          this._sortMovies(data.movies);
-          console.log('Movies sorted. Saving them to cache and mailing results.');
-        } catch (err) {
-          console.error(err);
-        } finally {
+          this._sortMovies(job.data.movies);
+          console.log('Movies sorted. Saving them to cache.');
           await this.#dataHelper.saveMovies(this.#movies);
           await this.#dataHelper.saveStatus('Loaded');
-          await MovieMailingQueue.enqueue({ movieCount: this.#movies.length });
+          // Mark hte progress as completed.
+          job.updateProgress(100);
+        } catch (err) {
+          console.error(err);
         }
       },
       {

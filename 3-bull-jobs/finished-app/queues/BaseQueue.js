@@ -4,6 +4,7 @@ import { Redis } from '../data/redis.js';
 export default class BaseQueue {
   #queue;
   #jobName;
+  queueName;
   #defaultOpts = {
     attempts: 5,
     backoff: { type: 'exponential', delay: 3000 },
@@ -12,6 +13,7 @@ export default class BaseQueue {
 
   constructor(queueName, jobName, opts = {}) {
     this.#jobName = jobName;
+    this.queueName = queueName;
     this.#queue = new Queue(
       queueName,
       {

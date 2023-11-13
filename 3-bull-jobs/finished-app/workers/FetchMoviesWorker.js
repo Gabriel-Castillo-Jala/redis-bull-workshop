@@ -1,9 +1,9 @@
-import _ from 'lodash';
-import { Worker } from 'bullmq';
+import _ from "lodash";
+import { Worker } from "bullmq";
 
-import { Redis } from '../data/redis.js';
-import { MovieSortingQueue } from '../queues/index.js';
-import { MovieAPIService } from '../lib/movies/movieApiService.js';
+import { Redis } from "../data/redis.js";
+import { MovieSortingQueue } from "../queues/index.js";
+import { MovieAPIService } from "../lib/movies/movieApiService.js";
 
 export default class FetchMoviesWorker {
   #queueName;
@@ -24,12 +24,15 @@ export default class FetchMoviesWorker {
 
   startWork() {
     return new Worker(
-      this.#queueName,  
-      async ({ data }) => {
+      this.#queueName,
+      async (job) => {
         try {
+          job.progress = 0;
           console.log('Fetching movies...');
-          await this._fetchMovies(data.selectedGenres);
-          console.log('Movies fetched. Starting sort...');
+          await this._fetchMovies(job.data.selectedGenres);
+          // Two thirds of the progress made.
+          await job.updateProgress(67);
+          console.log("Movies fetched. Starting sort...");
         } catch (err) {
           console.error(err);
         } finally {
