@@ -55,16 +55,16 @@ class MovieHelper {
       throw new Error(`Not a valid Genre. Please choose any of the following: ${[...mappedGenres.keys()].join(', ')}`);
     }
 
-    const movies = await this.apiService.getMoviesByGenres(selectedGenres);
+    const movies = await this.apiService.getMoviesByGenres(selectedGenres, validGenres);
 
     const sortedMovies = this._sortMoviesByGenre(movies, selectedGenres);
     await this.dataHelper.saveMovies(sortedMovies);
     await this.dataHelper.saveStatus('Loaded');
   }
 
-  _sortMoviesByGenre(movies, genres) {
+  _sortMoviesByGenre(movies) {
     return _.sortBy(movies, (movie) => {
-      return movie.genre_ids.length;
+      return movie.genreLabels.length;
     });
   }
 }

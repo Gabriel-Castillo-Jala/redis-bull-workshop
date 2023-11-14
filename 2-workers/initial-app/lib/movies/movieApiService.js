@@ -39,7 +39,7 @@ class MovieAPIService {
     return jsonRes.genres;
   }
 
-  async getMoviesByGenres(genres) {
+  async getMoviesByGenres(genres, validGenres) {
     if (!genres || !Array.isArray(genres) || genres.length <= 0) {
       throw new Error('Need at least a genre to filter');
     }
@@ -72,6 +72,24 @@ class MovieAPIService {
     const movies = [];
     for (const jsonRes of jsonResponses) {
       movies.push(...jsonRes.results);
+    }
+
+    // map movies genres
+    const mappedGenres = new Map(validGenres.map((genre) => [genre.id, genre.name.toLowerCase()]));
+
+    for (const movie of movies) {
+      const genreLabels = [];
+
+      movie.genre_ids.forEach(id => {
+        genreLabels.push(mappedGenres.get(id));
+      });
+
+      movie.genreLabels = genreLabels;
+      delete movie.genre_ids;
+
+      await new Promise((resolve) => {
+        setTimeout(resolve, 1);
+      });
     }
 
     return movies;
