@@ -1,8 +1,8 @@
 const _ = require('lodash');
 const { Worker } = require('bullmq');
 
-const { redis } = require('../data/redis.js');
-const { DataHelper } = require('../data/dataHelper.js');
+const redis = require('../data/redis');
+const DataHelper = require('../data/dataHelper');
 
 class SortMoviesWorker {
   #queueName;

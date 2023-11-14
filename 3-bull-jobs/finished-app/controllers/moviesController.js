@@ -1,4 +1,5 @@
-const { MovieHelper } = require('../lib/movies/movieHelper.js');
+const MovieHelper = require('../lib/movies/movieHelper');
+
 class MovieController {
   constructor() {
     this.helper = new MovieHelper();
@@ -39,4 +40,4 @@ class MovieController {
   }
 }
 
-module.exports.MovieController = MovieController;
+module.exports = MovieController;

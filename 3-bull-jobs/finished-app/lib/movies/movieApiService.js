@@ -78,4 +78,4 @@ class MovieAPIService {
   }
 }
 
-module.exports.MovieAPIService = MovieAPIService;
+module.exports = MovieAPIService;

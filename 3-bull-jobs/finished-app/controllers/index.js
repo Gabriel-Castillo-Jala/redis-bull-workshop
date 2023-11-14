@@ -1,3 +1,5 @@
-const { MovieController } = require('./movieController.js');
+const MovieController = require('./moviesController');
 
-module.exports.MoviesController = new MovieController();
+module.exports = {
+  movieController: new MovieController(),
+};

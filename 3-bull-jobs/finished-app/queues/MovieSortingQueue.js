@@ -1,5 +1,5 @@
-const { BaseQueue } =  require('./BaseQueue.js');
-const { QUEUES } =  require('../constants.js');
+const { BaseQueue } =  require('./BaseQueue');
+const { QUEUES } =  require('../constants');
 
 const classParams = [
   QUEUES.MOVIE_SORTING_QUEUE.name,

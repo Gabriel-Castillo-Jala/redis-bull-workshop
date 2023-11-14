@@ -1,10 +1,10 @@
 const { QueueEvents } = require('bullmq');
 
-const { redis } = require('../data/redis.js');
-const { QueueEventHandler } = require('./queueHandler.js');
-const { GenreFetchingQueue } = require('./GenreFetchingQueue.js');
-const { MovieFetchingQueue } = require('./MovieFetchingQueue.js');
-const { MovieSortingQueue } = require('./MovieSortingQueue.js');
+const redis = require('../data/redis');
+const { QueueEventHandler } = require('./queueHandler');
+const { GenreFetchingQueue } = require('./GenreFetchingQueue');
+const { MovieFetchingQueue } = require('./MovieFetchingQueue');
+const { MovieSortingQueue } = require('./MovieSortingQueue');
 
 // Init queue monitoring
 new QueueEventHandler(new QueueEvents(MovieSortingQueue.queueName, { connection: redis })).listen();

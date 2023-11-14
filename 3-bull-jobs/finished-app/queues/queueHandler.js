@@ -1,4 +1,5 @@
 const { log } = require('console-log-colors');
+
 class QueueEventHandler {
   constructor(QueueListenerInstance) {
     this.queue = QueueListenerInstance;

@@ -1,8 +1,8 @@
 const { Worker } = require('bullmq');
 
-const { redis } = require('../data/redis.js');
-const { MovieSortingQueue } = require('../queues/index.js');
-const { MovieAPIService } = require('../lib/movies/movieApiService.js');
+const redis = require('../data/redis.js');
+const MovieAPIService = require('../lib/movies/movieApiService');
+const { MovieSortingQueue } = require('../queues');
 
 class FetchMoviesWorker {
   #queueName;

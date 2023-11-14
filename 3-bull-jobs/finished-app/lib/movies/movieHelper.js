@@ -1,8 +1,8 @@
 const _ = require('lodash');
 
-const { DataHelper } = require('../../data/dataHelper.js');
-const { MovieAPIService } = require('./movieApiService.js');
-const { GenreFetchingQueue } = require('../../queues/index.js');
+const DataHelper = require('../../data/dataHelper');
+const MovieAPIService = require('./movieApiService');
+const { GenreFetchingQueue } = require('../../queues');
 
 class MovieHelper {
   constructor() {
@@ -41,4 +41,4 @@ class MovieHelper {
   }
 }
 
-module.exports.MovieHelper = MovieHelper;
+module.exports = MovieHelper;

@@ -1,13 +1,12 @@
-const _ = require('lodash');
 const express = require('express');
 const Arena = require('bull-arena');
 const { Queue } = require('bullmq');
 const bodyParser = require('body-parser');
 
 // Raw import to init workers.
-require('./workers/index.js');
-const { ARENA_CONFIG } = require('./constants.js');
-const { MoviesController } = require('./controllers/index.js');
+require('./workers');
+const { ARENA_CONFIG } = require('./constants');
+const { movieController } = require('./controllers');
 
 const app = express();
 const arena = Arena({ BullMQ: Queue, queues: ARENA_CONFIG });
@@ -16,15 +15,15 @@ app.use(bodyParser.json());
 app.use('/queues', arena);
 
 app.get('/status', async (req, res) => {
-  await MoviesController.getStatus(req, res);
+  await movieController.getStatus(req, res);
 })
 
 app.get('/content', async (req, res) => {
-  await MoviesController.getContent(req, res);
+  await movieController.getContent(req, res);
 })
 
 app.post('/movie', async (req, res) => {
-  await MoviesController.getMovies(req, res, req.body);
+  await movieController.getMovies(req, res, req.body);
 })
 
 app.listen(3000, () => {

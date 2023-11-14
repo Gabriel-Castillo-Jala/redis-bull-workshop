@@ -1,6 +1,6 @@
 const _ = require('lodash');
 
-const { redis } = require('./redis.js');
+const redis = require('./redis');
 class DataHelper {
 
   constructor() {
@@ -25,7 +25,7 @@ class DataHelper {
       return;
     }
 
-    await this.flushMovies;
+    await this.flushMovies();
 
     const formattedMovies = this._stringifyMovies(movies);
 
@@ -66,4 +66,4 @@ class DataHelper {
   }
 }
 
-module.exports.DataHelper = DataHelper;
+module.exports = DataHelper;

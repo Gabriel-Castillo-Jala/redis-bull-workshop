@@ -1,10 +1,10 @@
 const _ =  require('lodash');
 const { Worker } =  require('bullmq');
 
-const { redis } =  require('../data/redis.js');
-const { DataHelper } =  require('../data/dataHelper.js');
-const { MovieFetchingQueue } =  require('../queues/index.js');
-const { MovieAPIService } =  require('../lib/movies/movieApiService.js');
+const redis =  require('../data/redis');
+const DataHelper =  require('../data/dataHelper');
+const MovieAPIService =  require('../lib/movies/movieApiService');
+const { MovieFetchingQueue } =  require('../queues');
 
 class FetchGenresWorker {
   #queueName;

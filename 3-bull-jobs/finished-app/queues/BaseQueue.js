@@ -1,5 +1,5 @@
 const { Queue } = require('bullmq');
-const { redis } = require('../data/redis.js');
+const redis = require('../data/redis');
 
 class BaseQueue {
   #queue;
@@ -9,7 +9,6 @@ class BaseQueue {
     attempts: 5,
     backoff: { type: 'exponential', delay: 1000, attempts: 1 },
   }
-
 
   constructor(queueName, jobName, opts = {}) {
     this.#jobName = jobName;
