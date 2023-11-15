@@ -10,12 +10,16 @@ class RedisManager {
 
   }
 
+  _stringify(queueContext) {
+    return queueContext.map((el) => JSON.stringify(el));
+  }
+
   async addToFifoQueue(queueContext) {
-    await redisInstance.lpush(FIFO_KEY, [JSON.stringify(queueContext)]);
+    await redisInstance.lpush(FIFO_KEY, this._stringify(queueContext));
   }
 
   async addToLifoQueue(queueContext) {
-    await redisInstance.lpush(LIFO_KEY, [JSON.stringify(queueContext)]);
+    await redisInstance.lpush(LIFO_KEY, this._stringify(queueContext));
   }
 }
 

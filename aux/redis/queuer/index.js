@@ -8,8 +8,7 @@ const runQueue = async (queue) => {
   }
 
   console.log(`Running: ${queue.queueNumber}`);
-  console.log(`Message: ${queue.message}`);
-  console.log(`End of: ${queue.queueNumber}`);
+  console.log(`Message: ${queue.message}\n`)
 };
 
 (async () => {
@@ -17,7 +16,7 @@ const runQueue = async (queue) => {
     await new Promise((resolve, reject) => {
       setTimeout(() => {
         resolve();
-      }, 5000);
+      }, 3000);
     });
 
     await runQueue(await redisManager.popFifoQueue());
@@ -31,7 +30,7 @@ const runQueue = async (queue) => {
     await new Promise((resolve, reject) => {
       setTimeout(() => {
         resolve();
-      }, 5000);
+      }, 3000);
     });
 
     await runQueue(await redisManager.popLifoQueue());
