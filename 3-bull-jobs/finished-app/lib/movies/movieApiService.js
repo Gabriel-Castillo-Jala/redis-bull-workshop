@@ -53,7 +53,7 @@ class MovieAPIService {
 
     const requests = [];
 
-    for (let page = 1; page < 1001; page++) {
+    for (let page = 1; page < 500; page++) {
       const url = `https://api.themoviedb.org/3/discover/movie?include_adult=true&include_video=false&language=en-US&page=${page}&sort_by=popularity.desc&with_genres=${joinedGenres}`;
       requests.push(fetch(url, opts));
     }

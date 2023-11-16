@@ -2,6 +2,7 @@ const _ = require('lodash');
 
 const DataHelper = require('../../data/dataHelper');
 const MovieAPIService = require('./movieApiService');
+const { GenreFetchingQueue } = require('../../queues');
 
 class MovieHelper {
   constructor() {
@@ -36,36 +37,7 @@ class MovieHelper {
       throw new Error('Need at least a genre to filter');
     }
 
-    await this.dataHelper.saveStatus('Loading');
-
-    const validGenres = await this.apiService.getGenres();
-
-    const mappedGenres = new Map(validGenres.map((genre) => [genre.name.toLowerCase(), genre.id]));
-
-    const selectedGenres = [];
-    for (const genre of genres) {
-      const genreId = mappedGenres.get(genre.toLowerCase());
-
-      if (!_.isNil(genreId)) {
-        selectedGenres.push(genreId);
-      }
-    }
-
-    if (_.isEmpty(selectedGenres)) {
-      throw new Error(`Not a valid Genre. Please choose any of the following: ${[...mappedGenres.keys()].join(', ')}`);
-    }
-
-    const movies = await this.apiService.getMoviesByGenres(selectedGenres);
-
-    const sortedMovies = this._sortMoviesByGenre(movies, selectedGenres);
-    await this.dataHelper.saveMovies(sortedMovies);
-    await this.dataHelper.saveStatus('Loaded');
-  }
-
-  _sortMoviesByGenre(movies, genres) {
-    return _.sortBy(movies, (movie) => {
-      return movie.genre_ids.length;
-    });
+    await GenreFetchingQueue.enqueue({ genres });
   }
 }
 
